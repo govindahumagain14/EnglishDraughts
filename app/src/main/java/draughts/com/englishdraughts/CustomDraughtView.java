@@ -74,7 +74,8 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         whiteCoin.setStrokeCap(Paint.Cap.ROUND);
 
         black.setColor(Color.BLACK);
-        black.setStrokeWidth(20);
+        black.setStrokeWidth(10);
+        black.setStyle(Paint.Style.STROKE);
 
         greenCell.setStrokeWidth(3);
         greenCell.setColor(Color.GREEN);
