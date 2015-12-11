@@ -30,6 +30,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
     private boolean isWhiteTurn = false;
     private String TAG = "View";
     private float minYPixels;
+    private int inValidMoveValue = -1;
     private int intialValue = 0;
     private int redCoinValue = 1;
     private int whiteCoinValue = 2;
@@ -88,16 +89,29 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         game = new int[noOfCells][noOfCells];
         for (int i = 0; i < game.length; i++) {
             for (int j = 0; j < game.length; j++) {
+                // Possible values for initial white coins
                 if (i < 3) {
-                    if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1)) {
+                    if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1))
                         game[i][j] = whiteCoinValue;
+                    else {
+                        game[i][j] = inValidMoveValue;
                     }
-                } else if (i > game.length - 4) {
-                    if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1)) {
+                }
+                // Possible values for initial red coins
+                else if (i > game.length - 4) {
+                    if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1))
                         game[i][j] = redCoinValue;
+                    else {
+                        game[i][j] = inValidMoveValue;
                     }
-                } else {
-                    game[i][j] = intialValue;
+                }
+                // Either empty positions or invalid positions
+                else {
+                    if ((i % 2 == 0 && j % 2 == 0) || (i % 2 == 1 && j % 2 == 1)) {
+                        game[i][j] = intialValue;
+                    } else {
+                        game[i][j] = inValidMoveValue;
+                    }
                 }
             }
         }
@@ -160,7 +174,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
             int yPosition = (int) (touchX / (cellHeight));
             int xPosition = (int) (touchY / (cellHeight));
             Log.i(TAG, "X :: " + xPosition + " Y:: " + yPosition);
-            Log.i(TAG, "Value:: "+game[xPosition][yPosition]);
+            Log.i(TAG, "Value:: " + game[xPosition][yPosition]);
             if (yPosition >= 0 && xPosition < noOfCells) {
                 // Coin is not selected
                 if (mPreviousYPosition == -1) {
@@ -170,6 +184,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                     // Is white turn
                     if (isWhiteTurn && game[xPosition][yPosition] == whiteCoinValue) {
                         setWhiteSelectedPosition(xPosition, yPosition);
+                        getPossibleMovementsForWhite(xPosition, yPosition);
                         isValidTouch = true;
                     } else if (!isWhiteTurn && game[xPosition][yPosition] == redCoinValue) {
                         setRedSelectedPosition(xPosition, yPosition);
@@ -177,7 +192,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                         invalidate();
                     }
                 }
-                // Coin is selected
+                // Reset the position, when Coin is selected and selected the same again
                 else if (game[xPosition][yPosition] == selectedPositionValue) {
                     resetCurrentPosition(xPosition, yPosition);
                     isValidTouch = true;
@@ -186,18 +201,19 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                 }
                 // Check for coin movement and move to that position
                 if (game[xPosition][yPosition] == possibleMoveValue) {
-                    // TODO: If valid movement, turn the player from white to red and vice versa
                     if (!isWhiteTurn) {
                         game[xPosition][yPosition] = redCoinValue;
 
                     } else {
-
+                        game[xPosition][yPosition] = whiteCoinValue;
                     }
                     isValidTouch = true;
                     game[mPreviousXPosition][mPreviousYPosition] = intialValue;
+                    resetPossibleValues();
                     isWhiteTurn = !isWhiteTurn;
                     mPreviousYPosition = -1;
                 }
+                // Invalidating when it is a valid touch
                 if (isValidTouch) {
                     invalidate();
                 }
@@ -205,45 +221,82 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         }
         return true;
     }
+
     private void getPossibleMovementsForWhite(int xPosition, int yPosition) {
         // Is King
         if (false) {
 
         } else {
             // Check for right side moves
-            checkRightRedPossibleMoves(xPosition, yPosition);
+            checkRightWhitePossibleMoves(xPosition, yPosition, false);
             // Check for left side moves
-            checkLeftRedPossibleMoves(xPosition, yPosition);
+            checkLeftWhitePossibleMoves(xPosition, yPosition, false);
         }
     }
 
-    private void getPossibleMovementsForRed(int xPosition, int yPosition) {
-        // Is King
-        if (false) {
-
-        } else {
-            // Check for right side moves
-            checkRightRedPossibleMoves(xPosition, yPosition);
-            // Check for left side moves
-            checkLeftRedPossibleMoves(xPosition, yPosition);
+    private void checkLeftWhitePossibleMoves(int xPosition, int yPosition, boolean isAlreadyPossiblePosition) {
+        for (int i = xPosition + 1; i < noOfCells; i++) {
+            for (int j = yPosition - 1; j >= 0; j--) {
+                Log.i(TAG, " X left:: " + i);
+                // If red coin exists
+                if (game[i][j] == redCoinValue) {
+                    // Check for empty space cross to this
+                    if (i + 1 < noOfCells && j - 1 > 0) {
+                        // Check for empty space cross to this
+                        if (game[i + 1][j - 1] == whiteCoinValue || game[i + 1][j - 1] == redCoinValue) {
+                            return;
+                        } else {
+                            game[i + 1][j - 1] = possibleMoveValue;
+                            checkLeftWhitePossibleMoves(i + 1, j - 1, true);
+                            checkRightWhitePossibleMoves(i + 1, j - 1, true);
+                            return;
+                        }
+                    }
+                }
+                // else, white coin exists
+                else if (game[i][j] == whiteCoinValue) {
+                    return;
+                }
+                // Empty space;
+                else if (game[i][j] != possibleMoveValue && game[i][j] != inValidMoveValue && !isAlreadyPossiblePosition) {
+                    Log.i(TAG, "pOSS left: X:: " + (i) + " Y:: " + (j));
+                    game[i][j] = possibleMoveValue;
+                    return;
+                }
+                // Possible value
+                else if (game[i][j] == possibleMoveValue) {
+                    return;
+                }
+            }
         }
     }
 
-    private void checkRightRedPossibleMoves(int xPosition, int yPosition) {
-        for (int i = xPosition - 1; i >= 0; i--) {
+    private void checkRightWhitePossibleMoves(int xPosition, int yPosition, boolean isAlreadyPossiblePosition) {
+        for (int i = xPosition + 1; i < noOfCells; i++) {
             for (int j = yPosition + 1; j < noOfCells; j++) {
 
                 Log.i(TAG, " X right:: " + i);
-                // If white coin exists
-                if (game[i][j] == whiteCoinValue) {
+                // If red coin exists
+                if (game[i][j] == redCoinValue) {
                     // Check for empty space cross to this
+                    if (i + 1 < noOfCells && j + 1 < noOfCells) {
+                        // Check for empty space cross to this
+                        if (game[i + 1][j + 1] == whiteCoinValue || game[i + 1][j + 1] == redCoinValue) {
+                            return;
+                        } else {
+                            game[i + 1][j + 1] = possibleMoveValue;
+                            checkLeftWhitePossibleMoves(i + 1, j + 1, true);
+                            checkRightWhitePossibleMoves(i + 1, j + 1, true);
+                            return;
+                        }
+                    }
                 }
-                // else, red coin exists
-                else if (game[i][j] == redCoinValue) {
+                // else, white coin exists
+                else if (game[i][j] == whiteCoinValue) {
                     return;
                 }
                 // Empty space
-                else if (game[i][j] != possibleMoveValue) {
+                else if (game[i][j] != possibleMoveValue && game[i][j] != inValidMoveValue && !isAlreadyPossiblePosition) {
                     Log.i(TAG, "pOSS right: X:: " + (i) + " Y:: " + (j));
                     game[i][j] = possibleMoveValue;
                     return;
@@ -256,20 +309,79 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         }
     }
 
-    private void checkLeftRedPossibleMoves(int xPosition, int yPosition) {
+    private void getPossibleMovementsForRed(int xPosition, int yPosition) {
+        // Is King
+        if (false) {
+
+        } else {
+            // Check for right side moves
+            checkRightRedPossibleMoves(xPosition, yPosition, false);
+            // Check for left side moves
+            checkLeftRedPossibleMoves(xPosition, yPosition, false);
+        }
+    }
+
+    private void checkRightRedPossibleMoves(int xPosition, int yPosition, boolean isAlreadyPossiblePosition) {
+        for (int i = xPosition - 1; i >= 0; i--) {
+            for (int j = yPosition + 1; j < noOfCells; j++) {
+
+                Log.i(TAG, " X right:: " + i);
+                // If white coin exists
+                if (game[i][j] == whiteCoinValue) {
+                    if (i - 1 > 0 && j + 1 < noOfCells) {
+                        // Check for empty space cross to this
+                        if (game[i - 1][j + 1] == whiteCoinValue || game[i - 1][j + 1] == redCoinValue) {
+                            return;
+                        } else {
+                            game[i - 1][j + 1] = possibleMoveValue;
+                            checkLeftRedPossibleMoves(i - 1, j + 1, true);
+                            checkRightRedPossibleMoves(i - 1, j + 1, true);
+                            return;
+                        }
+                    }
+                }
+                // else, red coin exists
+                else if (game[i][j] == redCoinValue) {
+                    return;
+                }
+                // Empty space
+                else if (game[i][j] != possibleMoveValue && game[i][j] != inValidMoveValue && !isAlreadyPossiblePosition) {
+                    Log.i(TAG, "pOSS right: X:: " + (i) + " Y:: " + (j));
+                    game[i][j] = possibleMoveValue;
+                    return;
+                }
+                // Possible value
+                else if (game[i][j] == possibleMoveValue) {
+                    return;
+                }
+            }
+        }
+    }
+
+    private void checkLeftRedPossibleMoves(int xPosition, int yPosition, boolean isAlreadyPossiblePosition) {
         for (int i = xPosition - 1; i >= 0; i--) {
             for (int j = yPosition - 1; j >= 0; j--) {
                 Log.i(TAG, " X left:: " + i);
                 // If white coin exists
                 if (game[i][j] == whiteCoinValue) {
-                    // Check for empty space cross to this
+                    if (i - 1 > 0 && j - 1 > 0) {
+                        // Check for empty space cross to this
+                        if ((game[i - 1][j - 1] == whiteCoinValue || game[i - 1][j - 1] == redCoinValue)) {
+                            return;
+                        } else {
+                            game[i - 1][j - 1] = possibleMoveValue;
+                            checkLeftRedPossibleMoves(i - 1, j - 1, true);
+                            checkRightRedPossibleMoves(i - 1, j - 1, true);
+                            return;
+                        }
+                    }
                 }
                 // else, red coin exists
                 else if (game[i][j] == redCoinValue) {
                     return;
                 }
                 // Empty space;
-                else if (game[i][j] != possibleMoveValue) {
+                else if (game[i][j] != possibleMoveValue && game[i][j] != inValidMoveValue && !isAlreadyPossiblePosition) {
                     Log.i(TAG, "pOSS left: X:: " + (i) + " Y:: " + (j));
                     game[i][j] = possibleMoveValue;
                     return;
@@ -288,6 +400,13 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         } else {
             game[xPosition][yPosition] = redCoinValue;
         }
+        resetPossibleValues();
+        mPreviousXPosition = -1;
+        mPreviousYPosition = -1;
+        selectedCoinValue = -1;
+    }
+
+    private void resetPossibleValues() {
         for (int i = 0; i < noOfCells; i++) {
             for (int j = 0; j < noOfCells; j++) {
                 if (game[i][j] == possibleMoveValue) {
@@ -295,9 +414,6 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                 }
             }
         }
-        mPreviousXPosition = -1;
-        mPreviousYPosition = -1;
-        selectedCoinValue = -1;
     }
 
     private void setWhiteSelectedPosition(int xPosition, int yPosition) {
