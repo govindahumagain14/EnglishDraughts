@@ -10,11 +10,32 @@
     <draughts.com.englishdraughts.CustomDraughtView
         android:id="@+id/draught_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_reset"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/draught_view"
-        android:text="Hello World!" />
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:text="@string/lbl_reset_game" />
+
+    <TextView
+        android:id="@+id/tv_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_reset"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:text="@string/board_size" />
+
+    <EditText
+        android:id="@+id/et_board_size"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_number"
+        android:text="@string/standard_size"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:inputType="number"
+        android:maxLength="2" />
+
 </RelativeLayout>
