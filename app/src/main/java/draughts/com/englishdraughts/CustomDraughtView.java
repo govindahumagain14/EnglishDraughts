@@ -65,6 +65,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Initializes the custom draught view
+     *
      * @param context
      */
     private void init(Context context) {
@@ -139,6 +140,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Draws the table and coins initially. This is responsible to draw table along with coins respectively.
+     *
      * @param canvas
      */
     private void drawTable(Canvas canvas) {
@@ -279,6 +281,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * To remove white coin and white king based on move of red king.
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -300,14 +303,18 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
             }
             // If Previous and present x position is same, then take right as priority and take that route
             else if (mPreviousYPosition == yPosition) {
-                if (i + 2 < noOfCells && j + 2 < noOfCells && game[i + 2][j + 2] == possibleMoveValue
-                        || game[i + 2][j + 2] == redKingValue) {
-                    game[i + 1][j + 1] = intialValue;
-                    removeBackwardEatableWhitePosition(i + 2, j + 2);
-                } else if (i + 2 < noOfCells && j - 2 >= 0 && game[i + 2][j - 2] == possibleMoveValue
-                        || game[i + 2][j - 2] == redKingValue) {
-                    game[i + 1][j - 1] = intialValue;
-                    removeBackwardEatableWhitePosition(i + 2, j - 2);
+                if (i + 2 < noOfCells && j + 2 < noOfCells) {
+                    if (game[i + 2][j + 2] == possibleMoveValue
+                            || game[i + 2][j + 2] == redKingValue) {
+                        game[i + 1][j + 1] = intialValue;
+                        removeBackwardEatableWhitePosition(i + 2, j + 2);
+                    }
+                } else if (i + 2 < noOfCells && j - 2 >= 0) {
+                    if (game[i + 2][j - 2] == possibleMoveValue
+                            || game[i + 2][j - 2] == redKingValue) {
+                        game[i + 1][j - 1] = intialValue;
+                        removeBackwardEatableWhitePosition(i + 2, j - 2);
+                    }
                 }
             }
         }
@@ -315,6 +322,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * To remove red coin and red king based on white king move.
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -336,14 +344,18 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
             }
             // If Previous and present x position is same, then take right as priority and take that route
             else if (mPreviousYPosition == yPosition) {
-                if (i + 2 < noOfCells && j + 2 < noOfCells && game[i + 2][j + 2] == possibleMoveValue
-                        || game[i + 2][j + 2] == whiteKingValue) {
-                    game[i + 1][j + 1] = intialValue;
-                    removeBackwardEatableRedPosition(i + 2, j + 2);
-                } else if (i + 2 < noOfCells && j - 2 >= 0 && game[i + 2][j - 2] == possibleMoveValue
-                        || game[i + 2][j - 2] == whiteKingValue) {
-                    game[i + 1][j - 1] = intialValue;
-                    removeBackwardEatableRedPosition(i + 2, j - 2);
+                if (i + 2 < noOfCells && j + 2 < noOfCells) {
+                    if (game[i + 2][j + 2] == possibleMoveValue
+                            || game[i + 2][j + 2] == whiteKingValue) {
+                        game[i + 1][j + 1] = intialValue;
+                        removeBackwardEatableRedPosition(i + 2, j + 2);
+                    }
+                } else if (i + 2 < noOfCells && j - 2 >= 0) {
+                    if (game[i + 2][j - 2] == possibleMoveValue
+                            || game[i + 2][j - 2] == whiteKingValue) {
+                        game[i + 1][j - 1] = intialValue;
+                        removeBackwardEatableRedPosition(i + 2, j - 2);
+                    }
                 }
             }
         }
@@ -351,6 +363,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method removes red coin and red king based on white move.
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -369,14 +382,18 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                 game[i - 1][j - 1] = intialValue;
                 j = j - 2;
             } else if (mPreviousYPosition == yPosition) {
-                if (i - 2 >= 0 && j + 2 < noOfCells && game[i - 2][j + 2] == possibleMoveValue
-                        || game[i - 2][j + 2] == whiteCoinValue) {
-                    game[i - 1][j + 1] = intialValue;
-                    removeEatableRedPositions(i - 2, j + 2);
-                } else if (i - 2 >= 0 && j - 2 >= 0 && game[i - 2][j - 2] == possibleMoveValue
-                        || game[i - 2][j - 2] == whiteCoinValue) {
-                    game[i - 1][j - 1] = intialValue;
-                    removeEatableRedPositions(i - 2, j - 2);
+                if (i - 2 >= 0 && j + 2 < noOfCells) {
+                    if (game[i - 2][j + 2] == possibleMoveValue
+                            || game[i - 2][j + 2] == whiteCoinValue) {
+                        game[i - 1][j + 1] = intialValue;
+                        removeEatableRedPositions(i - 2, j + 2);
+                    }
+                } else if (i - 2 >= 0 && j - 2 >= 0) {
+                    if (game[i - 2][j - 2] == possibleMoveValue
+                            || game[i - 2][j - 2] == whiteCoinValue) {
+                        game[i - 1][j - 1] = intialValue;
+                        removeEatableRedPositions(i - 2, j - 2);
+                    }
                 }
             }
         }
@@ -384,6 +401,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method removes the white coin and king based on red move.
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -402,14 +420,18 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
             }
             // If Previous and present x position is same, then take right as priority and take that route
             else if (mPreviousYPosition == yPosition) {
-                if (i + 2 < noOfCells && j + 2 < noOfCells && game[i + 2][j + 2] == possibleMoveValue
-                        || game[i + 2][j + 2] == redCoinValue) {
-                    game[i + 1][j + 1] = intialValue;
-                    removeEatableWhitePositions(i + 2, j + 2);
-                } else if (i + 2 < noOfCells && j - 2 >= 0 && game[i + 2][j - 2] == possibleMoveValue
-                        || game[i + 2][j - 2] == redCoinValue) {
-                    game[i + 1][j - 1] = intialValue;
-                    removeEatableWhitePositions(i + 2, j - 2);
+                if (i + 2 < noOfCells && j + 2 < noOfCells) {
+                    if (game[i + 2][j + 2] == possibleMoveValue
+                            || game[i + 2][j + 2] == redCoinValue) {
+                        game[i + 1][j + 1] = intialValue;
+                        removeEatableWhitePositions(i + 2, j + 2);
+                    }
+                } else if (i + 2 < noOfCells && j - 2 >= 0) {
+                    if (game[i + 2][j - 2] == possibleMoveValue
+                            || game[i + 2][j - 2] == redCoinValue) {
+                        game[i + 1][j - 1] = intialValue;
+                        removeEatableWhitePositions(i + 2, j - 2);
+                    }
                 }
             }
         }
@@ -417,6 +439,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Gets the possible moves for white coin.
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -434,6 +457,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method gets possible left moves for white king.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossiblePosition
@@ -478,6 +502,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method gets the possible right moves for white king.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossibleMove
@@ -509,6 +534,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This methods gets the possible moves for white coin.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossiblePosition
@@ -559,6 +585,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method gets the possible moves for white coin.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossiblePosition
@@ -609,6 +636,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Gets the possible moves for red coin
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -626,6 +654,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method checks the possible backward right moves for red king.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossibleMove
@@ -659,6 +688,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method checks the backward left possible red moves for the selected red king.
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossibleMove
@@ -692,6 +722,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method checks possible right red moves for the selected position
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossiblePosition
@@ -739,6 +770,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * This method checks possible left moves for normal red coin
+     *
      * @param xPosition
      * @param yPosition
      * @param isAlreadyPossiblePosition
@@ -785,6 +817,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * To reset the selected position
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -812,6 +845,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Sets the white selected position
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -824,6 +858,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Sets the red selected position
+     *
      * @param xPosition
      * @param yPosition
      */
@@ -836,6 +871,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
 
     /**
      * Resets the game with desired board size
+     *
      * @param boardSize
      */
     public void resetGame(int boardSize) {
