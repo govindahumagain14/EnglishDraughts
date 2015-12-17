@@ -92,7 +92,7 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
         whiteCoin.setStrokeCap(Paint.Cap.ROUND);
 
         black.setColor(Color.BLACK);
-        black.setStrokeWidth(8);
+        black.setStrokeWidth(5);
         black.setStyle(Paint.Style.STROKE);
 
         greenCell.setStrokeWidth(3);
@@ -163,9 +163,13 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                     } else if (selectedCoinValue == redCoinValue || selectedCoinValue == possibleRedEatingValue) {
                         canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, redCoin);
                     } else if (selectedCoinValue == redKingValue) {
+                        canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, redCoin);
+                        canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2 - cellHeight / 10, cellHeight / 4, black);
                         canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, redCoin);
                         canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, black);
                     } else if (selectedCoinValue == whiteKingValue) {
+                        canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, whiteCoin);
+                        canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, black);
                         canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, whiteCoin);
                         canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, black);
                     }
@@ -176,9 +180,13 @@ public class CustomDraughtView extends View implements View.OnTouchListener {
                 } else if (game[i][j] == redCoinValue) {
                     canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, redCoin);
                 } else if (game[i][j] == whiteKingValue) {
+                    canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, whiteCoin);
+                    canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, black);
                     canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, whiteCoin);
                     canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, black);
                 } else if (game[i][j] == redKingValue) {
+                    canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, redCoin);
+                    canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2- cellHeight / 10, cellHeight / 4, black);
                     canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, redCoin);
                     canvas.drawCircle(cellHeight / 2 * (j * 2) + cellHeight / 2, cellHeight / 2 * (i * 2) + cellHeight / 2, cellHeight / 4, black);
                 }
